@@ -8,6 +8,7 @@ using RpgApi.Models;
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq; 
 
 namespace RpgApi.Controllers
 {
@@ -138,7 +139,113 @@ namespace RpgApi.Controllers
                 string.Format("Nº Sorteado {0}. Personagem: {1}", sorteio, p.Nome);
             return Ok(msg);
         }
+        [HttpPost("DisputaEmGrupo")]
+        public async Task<IActionResult> DisputaEmGrupoAsync(Disputa d)
+        {
+            try
+            {
+                 //Busca na base dos personagens informados no parametro incluindo Armas e Habilidades
+                 List<Personagem> personagens = await _context.Personagens
+                 .Include(p => p.Arma)
+                 .Include(p => p.PersonagemHabilidades).ThenInclude(ph => ph.Habilidade)
+                 .Where(p => d.ListaIdPersonagens.Contains(p.Id)).ToListAsync();
 
+                //Contagem de Persoagens vivos na Lista obtida do banco de dados
+                int qtdPersonagensVivos = personagens.FindAll(p => p.PontosVida > 0).Count;
+
+                //Enquanto houver mais de um personagem vivo haverá disputa
+                while(qtdPersonagensVivos > 1)
+                {
+                    //Seleciona parsonagens com pontos de vida positivos e depois faz o sorteio.
+                    List<Personagem> atacantes = personagens.Where(p => p.PontosVida > 0).ToList();
+                    Personagem atacante = atacantes [new Random().Next(atacantes.Count)];
+                    d.AtacanteId = atacante.Id; 
+
+                    //Seleciono personagens com pontos de vida positivos, exceto o atacante escolhido e depois faz sorteio  
+                    List<Personagem> oponentes = personagens.Where(p => p.Id != atacante.Id && p.PontosVida > 0).ToList();
+                    Personagem oponente = oponentes[new Random().Next(oponentes.Count)];
+                    d.AtacanteId = oponente.Id;
+
+                    //declare e redefine a cada passagem do while o valor das vaiaveis que serão usadas.
+                    int dano = 0;
+                    string ataqueUsado = string.Empty;
+                    string resultado = string.Empty; 
+
+                    //Sorteia entre 0 e 1: 0 é um ataque com arma e 1 é um ataque com habilidades 
+                    bool ataqueUsaArma = (new Random().Next(1) == 0);
+                    if (ataqueUsaArma && atacante.Arma != null)
+                    {
+                       //Programação do ataque com arma caso o atacante possua arma (o != null) do if
+                        //Programação do ataque com arma
+                        // Sorteio da Força
+                        dano = atacante.Arma.Dano + (new Random().Next(atacante.Forca));
+                        dano = dano - new Random().Next (oponente.Defesa); //Sorteio da defesa
+                        ataqueUsado = atacante.Arma.Nome;
+
+                        if (dano > 0)
+                        oponente.PontosVida = oponente.PontosVida - (int)dano;
+
+                        //Formata a mensagem
+                        resultado= string.Format("{0} atacou {1} usando {2} com o dano {3}. ", atacante.Nome, oponente.Nome, ataqueUsado, dano);
+                        d.Narracao += resultado; //Concatena o resultado com as narrações existentes.
+                        d.Resultados.Add(resultado); //Adiciona o resulta atual na lista de resultados.
+
+                    }
+                    else if (atacante.PersonagemHabilidades.Count != 0)//Verifica se o personagem tem habilidades
+                    {
+                        //Programação do ataque com habilidade 
+                        //Realiza o sorteio entre as habilidades existentes e na linha seguinte a seleciona
+                        int sorteioHabilidadeId = new Random().Next(atacante.PersonagemHabilidades.Count);
+                        Habilidade habilidadeEscolhida = atacante.PersonagemHabilidades[sorteioHabilidadeId].Habilidade;
+                        ataqueUsado = habilidadeEscolhida.Nome;
+
+                        //Sorteio da inteligencia somada ao dano
+                        dano = habilidadeEscolhida.Dano + (new Random().Next (atacante.Inteligencia));
+                        dano = dano - new Random().Next(oponente.Defesa);//Sorteio da defesa.
+
+                        if (dano > 0)
+                        oponente.PontosVida = oponente.PontosVida - (int) dano;
+                        resultado = string.Format("{0} atacou {1} usando {2} com dano {3}. ", atacante.Nome, oponente.Nome, ataqueUsado, dano);
+                        d.Narracao += resultado;
+                        d.Resultados.Add(resultado);
+                    } 
+                    if (!string.IsNullOrEmpty(ataqueUsado))
+                    {
+                        //Incrementa os dados dos combates
+                        atacante.Vitorias++;
+                        oponente.Derrotas++;
+                        atacante.Disputas++;
+                        oponente.Disputas++;
+
+                        d.Id = 0; //zera o Id para poder salavar os dados de disputa sem erro de chave.
+                        d.DataDisputa = DateTime.Now;
+                        _context.Disputas.Add(d);
+                        await _context.SaveChangesAsync();
+                    }
+                    qtdPersonagensVivos = personagens.FindAll(p => p.PontosVida > 0).Count;
+                    if (qtdPersonagensVivos == 1)//Havendo só um personagem vivo, existe um CAMPEAO!
+                    {
+                        string resultadoFinal = $"{atacante.Nome.ToUpper()} é CAMPEÃO com {atacante.PontosVida} pontos de vida restantes! ";
+                        d.Narracao += resultadoFinal; //Concatena o resultado final com as demais narrações.
+                        d.Resultados.Add(resultadoFinal);//Concatena o resultado final com os demais resultados
+                        break; //para parar o While
+                    }
+                }
+                
+                //Código após o fechamento do While. Atualizará os pontos de vida, 
+                //disputas, vitórias e derrotas de todos personagens ao final das batalhas
+                _context.Personagens.UpdateRange(personagens);
+                await _context.SaveChangesAsync();
+
+                return Ok(d); //retorna os dados de disputas
+
+            }
+            catch (System.Exception ex)
+            {
+                
+                return BadRequest(ex.Message);
+            }
+        }
 
 
 

@@ -33,7 +33,7 @@ namespace RpgApi.Controllers
                 .Include(us => us.Usuario)//Inclui na propriedade Usuario do objeto p
                 .Include(ph => ph.PersonagemHabilidades)
                     .ThenInclude(h => h.Habilidade) //Inclui na lista de PersonagemHabilidade de p
-                .FirstOrDefaultAsync(pBusca => pBusca.Id == id);
+                .FirstOrDefaultAsync(pBusca => pBusca.Id == id);//pBusca representa cada item da lista, e o pBuscaId compara se é true ou false 
                 return Ok(p);
             }
             catch (System.Exception ex)
@@ -176,5 +176,8 @@ namespace RpgApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
+
+        
     }
 }

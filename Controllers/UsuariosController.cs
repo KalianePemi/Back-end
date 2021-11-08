@@ -44,6 +44,7 @@ namespace RpgApi.Controllers
             }
             return false;
         }
+        [AllowAnonymous]
         [HttpPost("Registrar")]
         public async Task<IActionResult> RegistrarUsuario(Usuario user)
         {

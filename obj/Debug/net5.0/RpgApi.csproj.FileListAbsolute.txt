@@ -92,3 +92,8 @@ D:/Work/ETEC/DS2021-2/RpgApi/obj/Debug/net5.0/RpgApi.genruntimeconfig.cache
 /Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/Debug/net5.0/Newtonsoft.Json.Bson.dll
 /Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/Debug/net5.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
 /Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/Debug/net5.0/Microsoft.EntityFrameworkCore.InMemory.dll
+/Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/Debug/net5.0/publish/web.config
+/Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/Debug/net5.0/publish/appsettings.Development.json
+/Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/Debug/net5.0/publish/appsettings.json
+/Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/Debug/net5.0/publish/RpgApi.deps.json
+/Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/Debug/net5.0/publish/RpgApi.runtimeconfig.json

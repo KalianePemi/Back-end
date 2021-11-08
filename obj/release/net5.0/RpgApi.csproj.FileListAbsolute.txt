@@ -62,3 +62,4 @@
 /Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/release/net5.0/Microsoft.AspNetCore.JsonPatch.dll
 /Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/release/net5.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 /Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/release/net5.0/Newtonsoft.Json.Bson.dll
+/Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/release/net5.0/Microsoft.EntityFrameworkCore.InMemory.dll

@@ -12,6 +12,7 @@
 /Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/release/net5.0/publish/Microsoft.EntityFrameworkCore.dll
 /Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/release/net5.0/publish/Microsoft.EntityFrameworkCore.Abstractions.dll
 /Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/release/net5.0/publish/Microsoft.EntityFrameworkCore.Design.dll
+/Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/release/net5.0/publish/Microsoft.EntityFrameworkCore.InMemory.dll
 /Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/release/net5.0/publish/Microsoft.EntityFrameworkCore.Relational.dll
 /Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/release/net5.0/publish/Microsoft.EntityFrameworkCore.SqlServer.dll
 /Users/kalianepemi/Documents/Kaliane/ETEC/DS/RpgApi/bin/release/net5.0/publish/Microsoft.Extensions.DependencyInjection.dll

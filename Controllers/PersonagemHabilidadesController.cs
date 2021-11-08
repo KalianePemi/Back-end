@@ -64,27 +64,7 @@ namespace RpgApi.Controllers
             }
         }
         
-        [HttpPost("DeletePersonagemHabilida")]
-        public async Task<IActionResult> DeleteAsync(PersonagemHabilidade phBusca)
-        {
-            try
-            {
-                 PersonagemHabilidade phRemover = await _context.PersonagemHabilidades 
-                 .FirstOrDefaultAsync(ph => ph.PersonagemId == phBusca.PersonagemId && phBusca.HabilidadeId == ph.HabilidadeId);
-                 if (phRemover == null)
-                 throw new System.Exception("Personagem ou Habilidade não econtrados");
-                 _context.PersonagemHabilidades.Remove(phRemover);
-                 int linhasAfetadas = await _context.SaveChangesAsync();
-                 return Ok(linhasAfetadas);
-            }
-            catch (System.Exception ex)
-            {
-                
-                return BadRequest(ex.Message);
-            }
-        }
-        
-        [HttpGet("GetHabilidades")]
+           [HttpGet("GetHabilidades")]
         public async Task<IActionResult>GetHabilidades()
         {
             try
@@ -100,7 +80,24 @@ namespace RpgApi.Controllers
             }
         }
 
-
+        [HttpPost("DeletePersonagemHabilidade")]
+        public async Task<IActionResult> DeleteAsync(PersonagemHabilidade ph) 
+        {
+            try
+            {
+                PersonagemHabilidade phRemover = await _context.PersonagemHabilidades.FirstOrDefaultAsync(phBusca => phBusca.PersonagemId == ph.PersonagemId && phBusca.HabilidadeId == ph.HabilidadeId);
+                if(phRemover == null)
+                    throw new System.Exception("Personagem ou Habilidade não encontrado");
+                _context.PersonagemHabilidades.Remove(phRemover);
+                int linhasAfetadas = await _context.SaveChangesAsync();
+                return Ok(linhasAfetadas);    
+            }
+            catch (System.Exception ex)
+            {
+                
+                return BadRequest(ex.Message);
+            }
+        } 
 
 
 
